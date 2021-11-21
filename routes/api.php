@@ -36,4 +36,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // route set rating untuk tempat parkir
     Route::post('parkinglot/rating', [UserParkingController::class, 'sendRating']);
+    // route untuk pesan parkir
+    Route::post('pesan', [UserParkingController::class, 'pesan_parkir']);
 });

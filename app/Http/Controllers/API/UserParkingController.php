@@ -17,7 +17,7 @@ class UserParkingController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    // mengambil semua data tempat parkir
+    // sending rating ke tempat parkir
     public function sendRating(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -34,5 +34,31 @@ class UserParkingController extends BaseController
             'rate' => $request->rate
         ]);
         return $this->sendResponse($input, 'Rating sudah ditambahkan.');
+    }
+    // function pesan parkir
+    public function pesan_parkir(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'park_id' => 'required',
+            'type' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+        $park = parking_lot::find($request->park_id);
+        if ($request->type == 'car') {
+            $cost = $park->car_price;
+        } else {
+            $cost = $park->bike_price;
+        }
+        $input = user_parking::create([
+            'park_id' => $request->park_id,
+            'user_id' => Auth::user()->id,
+            'type' => $request->type,
+            'cost' => $cost,
+            'status' => 'otw'
+        ]);
+        return $this->sendResponse($input, 'silahkan datang pada lokasi dalam 1 jam');
     }
 }

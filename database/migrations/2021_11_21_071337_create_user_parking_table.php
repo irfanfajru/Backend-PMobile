@@ -19,8 +19,8 @@ class CreateUserParkingTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('type');
             $table->datetime('order_time');
-            $table->datetime('checkin_time');
-            $table->datetime('checkout_time');
+            $table->datetime('checkin_time')->nullable();
+            $table->datetime('checkout_time')->nullable();
             $table->bigInteger('cost');
             $table->string('status');
             $table->timestamps();
