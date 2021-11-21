@@ -15,10 +15,19 @@ class ParkinglotController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
+    // mengambil semua data tempat parkir
     public function index()
     {
-        $data = parking_lot::all();
-
+        $data = parking_lot::with(['facilities', 'rating'])->get();
+        if (count($data) == 0) return $this->sendError('data not found');
+        return $this->sendResponse($data, 'data retrieved successfully.');
+    }
+    // mencari tempat parkir berdasarkan lokasi
+    public function findParking($request)
+    {
+        $keyword = $request;
+        $data = parking_lot::with(['facilities', 'rating'])->where('location', 'like', '%' . $keyword . '%')->get();
+        if (count($data) == 0) return $this->sendError('data not found');
         return $this->sendResponse($data, 'data retrieved successfully.');
     }
 }

@@ -21,5 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 
-
+// mengembalikan semua data tempat Parkir
 Route::get('parkinglot', [ParkinglotController::class, 'index']);
+// mencari tempat parkir berdasarkan lokasi
+Route::get('parkinglot/{location}', [ParkinglotController::class, 'findParking']);

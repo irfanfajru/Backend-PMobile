@@ -9,6 +9,7 @@ class parking_lot extends Model
 {
     use HasFactory;
     protected $table = 'parking_lot';
+    protected $primaryKey = 'park_id';
     protected $fillable = [
         'name',
         'location',
@@ -21,4 +22,12 @@ class parking_lot extends Model
         'operational',
         'status'
     ];
+    public function facilities()
+    {
+        return $this->hasMany(parking_facilities::class, 'park_id', 'park_id');
+    }
+    public function rating()
+    {
+        return $this->hasMany(rating::class, 'park_id', 'park_id');
+    }
 }

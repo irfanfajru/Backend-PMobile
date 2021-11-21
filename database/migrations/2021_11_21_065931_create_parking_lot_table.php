@@ -17,8 +17,8 @@ class CreateParkingLotTable extends Migration
             $table->id('park_id');
             $table->string('name');
             $table->text('location');
-            $table->float('latitude');
-            $table->float('longitude');
+            $table->text('latitude');
+            $table->text('longitude');
             $table->bigInteger('car_price');
             $table->bigInteger('bike_price');
             $table->integer('car_slot');
