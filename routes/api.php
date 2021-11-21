@@ -38,4 +38,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('parkinglot/rating', [UserParkingController::class, 'sendRating']);
     // route untuk pesan parkir
     Route::post('pesan', [UserParkingController::class, 'pesan_parkir']);
+    // route untuk detail pesan parkir
+    Route::get('pesan/detail', [UserParkingController::class, 'detail_pesanan']);
 });

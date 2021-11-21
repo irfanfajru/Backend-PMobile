@@ -38,6 +38,10 @@ class UserParkingController extends BaseController
     // function pesan parkir
     public function pesan_parkir(Request $request)
     {
+        if (user_parking::where('user_id', Auth::user()->id)->firstOrFail()) {
+            return $this->sendError('User sudah memesan parkir sebelumnya');
+        }
+
         $validator = Validator::make($request->all(), [
             'park_id' => 'required',
             'type' => 'required',
@@ -60,5 +64,15 @@ class UserParkingController extends BaseController
             'status' => 'otw'
         ]);
         return $this->sendResponse($input, 'silahkan datang pada lokasi dalam 1 jam');
+    }
+
+    // detail pesan parkir
+    public function detail_pesanan()
+    {
+        if ($data = user_parking::where('user_id', Auth::user()->id)->firstOrFail()) {
+            return $this->sendResponse($data, 'data berhasil ditampilkan');
+        } else {
+            return $this->sendError('User belum memesan parkir');
+        }
     }
 }
