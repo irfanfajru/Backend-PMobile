@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\ParkinglotController;
+use App\Http\Controllers\API\RegisterController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,14 +15,20 @@ use App\Http\Controllers\API\ParkinglotController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 
-// mengembalikan semua data tempat Parkir
-Route::get('parkinglot', [ParkinglotController::class, 'index']);
-// mencari tempat parkir berdasarkan lokasi
-Route::get('parkinglot/{location}', [ParkinglotController::class, 'findParking']);
+Route::middleware(['auth:sanctum'])->group(function () {
+    // route untuk detail user
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    // route untuk logout
+    Route::get('/logout', function (Request $request) {
+        return $request->user()->tokens()->delete();
+    });
+    // mengembalikan semua data tempat Parkir
+    Route::get('parkinglot', [ParkinglotController::class, 'index']);
+    // mencari tempat parkir berdasarkan lokasi
+    Route::get('parkinglot/{location}', [ParkinglotController::class, 'findParking']);
+});
