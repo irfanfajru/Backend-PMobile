@@ -9,4 +9,10 @@ class parking_facilities extends Model
 {
     use HasFactory;
     protected $table = 'parking_facilities';
+    protected $hidden = [
+        'park_id',
+        'fac_id',
+        'created_at',
+        'updated_at'
+    ];
 }

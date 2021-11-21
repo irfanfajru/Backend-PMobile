@@ -10,4 +10,9 @@ class rating extends Model
     use HasFactory;
     protected $table = 'rating';
     protected $primaryKey = 'rating_id';
+    protected $fillable = [
+        'park_id',
+        'user_id',
+        'rate'
+    ];
 }
