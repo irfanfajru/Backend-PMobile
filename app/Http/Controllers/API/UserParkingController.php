@@ -35,6 +35,7 @@ class UserParkingController extends BaseController
         ]);
         return $this->sendResponse($input, 'Rating sudah ditambahkan.');
     }
+
     // function pesan parkir
     public function pesan_parkir(Request $request)
     {
@@ -71,6 +72,69 @@ class UserParkingController extends BaseController
     {
         if ($data = user_parking::where('user_id', Auth::user()->id)->firstOrFail()) {
             return $this->sendResponse($data, 'data berhasil ditampilkan');
+        } else {
+            return $this->sendError('User belum memesan parkir');
+        }
+    }
+
+    // sudah sampai tempat parkir 
+    public function sudahSampai()
+    {
+        if ($data = user_parking::where('user_id', Auth::user()->id)->firstOrFail()) {
+            if ($data->status == 'otw') {
+                $data->checkin_time = date('Y-m-d H:i:s');
+                $data->status = 'sampai';
+                $data->save();
+                return $this->sendResponse($data, 'User sudah sampai pada ' . $data->checkin_time);
+            } else {
+                return $this->sendError('User sudah sampai tempat parkir');
+            }
+        } else {
+            return $this->sendError('User belum memesan parkir');
+        }
+    }
+
+    // Pembatalan pesanan
+    public function batalPesanan()
+    {
+        if ($data = user_parking::where('user_id', Auth::user()->id)->firstOrFail()) {
+            if ($data->status == 'otw') {
+                $data->delete();
+                return $this->sendResponse($data, 'Pesanan dibatalkan');
+            } else {
+                return $this->sendError('Tidak bisa membatalkan,karena sudah sampai');
+            }
+        } else {
+            return $this->sendError('User belum memesan parkir');
+        }
+    }
+
+    // function return durasi checkin dan checkout
+    public function getCost($checkin, $checkout, $cost)
+    {
+        $time1 = strtotime($checkin);
+        $time2 = strtotime($checkout);
+
+        $durasi = $time2 - $time1;
+        $durasi = date("H", $durasi);
+        $durasi++;
+        $costTotal = $cost * $durasi;
+        return $costTotal;
+    }
+
+    // Selesai parkir
+    public function selesaiParkir()
+    {
+        if ($data = user_parking::where('user_id', Auth::user()->id)->firstOrFail()) {
+            if ($data->status == 'sampai') {
+                $data->checkout_time = date('Y-m-d H:i:s');
+                $data->status = 'selesai';
+                $data->cost = $this->getCost($data->checkintime, $data->checkout_time, $data->cost);
+                $data->delete();
+                return $this->sendResponse($data, 'Parkir telah selesai');
+            } else {
+                return $this->sendError('User belum sampai ke tempat parkir');
+            }
         } else {
             return $this->sendError('User belum memesan parkir');
         }
