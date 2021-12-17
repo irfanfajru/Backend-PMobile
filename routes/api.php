@@ -34,6 +34,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // mencari tempat parkir berdasarkan lokasi
     Route::get('parkinglot/{location}', [ParkinglotController::class, 'findParking']);
 
+    // detail tempat parkir berdasarkan id
+    Route::get('parkinglot/detail/{id}', [ParkinglotController::class, 'show']);
+
     // route set rating untuk tempat parkir
     Route::post('parkinglot/rating', [UserParkingController::class, 'sendRating']);
 

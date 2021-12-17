@@ -29,4 +29,11 @@ class ParkinglotController extends BaseController
         if (count($data) == 0) return $this->sendError('data not found');
         return $this->sendResponse(ParkingLot::collection($data), 'data retrieved successfully.');
     }
+    // mencari tempat parkir berdasaran id parking_lot
+    public function show($id)
+    {
+        $data = parking_lot::find($id);
+        if (count($data) == 0) return $this->sendError('data not found');
+        return $this->sendResponse(ParkingLot::collection($data), 'data retrieved successfully.');
+    }
 }
